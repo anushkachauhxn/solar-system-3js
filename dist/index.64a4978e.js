@@ -597,11 +597,16 @@ const mercuryMat = new _three.MeshStandardMaterial({
     map: textureLoader.load((0, _mercuryJpgDefault.default))
 });
 const mercury = new _three.Mesh(mercuryGeo, mercuryMat);
-sun.add(mercury); // parent-child relationship => position of mercury is relative to the position of the sun
+// parent-child relationship => position of mercury is relative to the position of the sun
+// for different rotation speeds, planets will be relative to individual objects coinciding with the sun
+const mercuryObj = new _three.Object3D();
+scene.add(mercuryObj);
+mercuryObj.add(mercury);
 mercury.position.x = 28;
 // Animations
 function animate() {
     sun.rotateY(0.004);
+    mercuryObj.rotateY(0.04);
     mercury.rotateY(0.004);
     renderer.render(scene, camera);
 }
