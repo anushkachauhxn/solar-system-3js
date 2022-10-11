@@ -591,45 +591,49 @@ scene.add(sun);
 // Light Source: at the center of the sun
 const pointLight = new _three.PointLight(0xffffff, 2, 300);
 scene.add(pointLight);
+function createPlanet(size, texture, position, ring) {
+    const geo = new _three.SphereGeometry(size, 30, 30);
+    const mat = new _three.MeshStandardMaterial({
+        map: textureLoader.load(texture)
+    });
+    const mesh = new _three.Mesh(geo, mat);
+    // parent-child relationship => position of mercury is relative to the position of the sun
+    // for different rotation speeds, planets will be relative to individual objects coinciding with the sun
+    const obj = new _three.Object3D();
+    obj.add(mesh);
+    scene.add(obj);
+    mesh.position.x = position;
+    if (ring) {
+        const ringGeo = new _three.RingGeometry(ring.innerRadius, ring.outerRadius, 32);
+        const ringMat = new _three.MeshBasicMaterial({
+            map: textureLoader.load(ring.texture),
+            side: _three.DoubleSide
+        });
+        const ringMesh = new _three.Mesh(ringGeo, ringMat);
+        obj.add(ringMesh);
+        ringMesh.position.x = position;
+        ringMesh.rotation.x = -0.5 * Math.PI;
+    }
+    return {
+        mesh,
+        obj
+    };
+}
 // 1. MERCURY
-const mercuryGeo = new _three.SphereGeometry(3.2, 30, 30);
-const mercuryMat = new _three.MeshStandardMaterial({
-    map: textureLoader.load((0, _mercuryJpgDefault.default))
-});
-const mercury = new _three.Mesh(mercuryGeo, mercuryMat);
-// parent-child relationship => position of mercury is relative to the position of the sun
-// for different rotation speeds, planets will be relative to individual objects coinciding with the sun
-const mercuryObj = new _three.Object3D();
-scene.add(mercuryObj);
-mercuryObj.add(mercury);
-mercury.position.x = 28;
+const mercury = createPlanet(3.2, (0, _mercuryJpgDefault.default), 28);
 // 6. SATURN
-const saturnGeo = new _three.SphereGeometry(10, 30, 30);
-const saturnMat = new _three.MeshStandardMaterial({
-    map: textureLoader.load((0, _saturnJpgDefault.default))
+const saturn = createPlanet(10, (0, _saturnJpgDefault.default), 138, {
+    innerRadius: 10,
+    outerRadius: 20,
+    texture: (0, _saturnRingPngDefault.default)
 });
-const saturn = new _three.Mesh(saturnGeo, saturnMat);
-const saturnObj = new _three.Object3D();
-scene.add(saturnObj);
-saturnObj.add(saturn);
-saturn.position.x = 138;
-// 6.5 SATURN RING
-const saturnRingGeo = new _three.RingGeometry(10, 20, 32);
-const saturnRingMat = new _three.MeshBasicMaterial({
-    map: textureLoader.load((0, _saturnRingPngDefault.default)),
-    side: _three.DoubleSide
-});
-const saturnRing = new _three.Mesh(saturnRingGeo, saturnRingMat);
-saturnObj.add(saturnRing);
-saturnRing.position.x = 138;
-saturnRing.rotation.x = -0.5 * Math.PI;
 // Animations
 function animate() {
     sun.rotateY(0.004);
-    mercuryObj.rotateY(0.04);
-    mercury.rotateY(0.004);
-    saturnObj.rotateY(0.0009);
-    saturn.rotateY(0.038);
+    mercury.obj.rotateY(0.04);
+    mercury.mesh.rotateY(0.004);
+    saturn.obj.rotateY(0.0009);
+    saturn.mesh.rotateY(0.038);
     renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
