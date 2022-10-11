@@ -46,7 +46,7 @@ scene.background = cubeTextureLoader.load([
 
 const textureLoader = new THREE.TextureLoader();
 
-// SUN
+// 0. SUN
 const sunGeo = new THREE.SphereGeometry(16, 30, 30);
 const sunMat = new THREE.MeshBasicMaterial({
   map: textureLoader.load(sunTexture),
@@ -58,7 +58,7 @@ scene.add(sun);
 const pointLight = new THREE.PointLight(0xffffff, 2, 300);
 scene.add(pointLight);
 
-// MERCURY
+// 1. MERCURY
 const mercuryGeo = new THREE.SphereGeometry(3.2, 30, 30);
 const mercuryMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(mercuryTexture),
@@ -72,11 +72,37 @@ scene.add(mercuryObj);
 mercuryObj.add(mercury);
 mercury.position.x = 28;
 
+// 6. SATURN
+const saturnGeo = new THREE.SphereGeometry(10, 30, 30);
+const saturnMat = new THREE.MeshStandardMaterial({
+  map: textureLoader.load(saturnTexture),
+});
+const saturn = new THREE.Mesh(saturnGeo, saturnMat);
+
+const saturnObj = new THREE.Object3D();
+scene.add(saturnObj);
+saturnObj.add(saturn);
+saturn.position.x = 138;
+
+// 6.5 SATURN RING
+const saturnRingGeo = new THREE.RingGeometry(10, 20, 32);
+const saturnRingMat = new THREE.MeshBasicMaterial({
+  map: textureLoader.load(saturnRingTexture),
+  side: THREE.DoubleSide,
+});
+const saturnRing = new THREE.Mesh(saturnRingGeo, saturnRingMat);
+
+saturnObj.add(saturnRing);
+saturnRing.position.x = 138;
+saturnRing.rotation.x = -0.5 * Math.PI;
+
 // Animations
 function animate() {
   sun.rotateY(0.004);
   mercuryObj.rotateY(0.04);
   mercury.rotateY(0.004);
+  saturnObj.rotateY(0.0009);
+  saturn.rotateY(0.038);
 
   renderer.render(scene, camera);
 }
