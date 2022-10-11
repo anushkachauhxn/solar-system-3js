@@ -54,9 +54,13 @@ const sunMat = new THREE.MeshBasicMaterial({
 const sun = new THREE.Mesh(sunGeo, sunMat);
 scene.add(sun);
 
+// Light Source: at the center of the sun
+const pointLight = new THREE.PointLight(0xffffff, 2, 300);
+scene.add(pointLight);
+
 // MERCURY
 const mercuryGeo = new THREE.SphereGeometry(3.2, 30, 30);
-const mercuryMat = new THREE.MeshBasicMaterial({
+const mercuryMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(mercuryTexture),
 });
 const mercury = new THREE.Mesh(mercuryGeo, mercuryMat);

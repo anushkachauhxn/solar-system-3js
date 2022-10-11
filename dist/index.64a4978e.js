@@ -588,9 +588,12 @@ const sunMat = new _three.MeshBasicMaterial({
 });
 const sun = new _three.Mesh(sunGeo, sunMat);
 scene.add(sun);
+// Light Source: at the center of the sun
+const pointLight = new _three.PointLight(0xffffff, 2, 300);
+scene.add(pointLight);
 // MERCURY
 const mercuryGeo = new _three.SphereGeometry(3.2, 30, 30);
-const mercuryMat = new _three.MeshBasicMaterial({
+const mercuryMat = new _three.MeshStandardMaterial({
     map: textureLoader.load((0, _mercuryJpgDefault.default))
 });
 const mercury = new _three.Mesh(mercuryGeo, mercuryMat);
