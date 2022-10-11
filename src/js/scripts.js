@@ -46,11 +46,34 @@ scene.background = cubeTextureLoader.load([
 
 const textureLoader = new THREE.TextureLoader();
 
+// SUN
+const sunGeo = new THREE.SphereGeometry(16, 30, 30);
+const sunMat = new THREE.MeshBasicMaterial({
+  map: textureLoader.load(sunTexture),
+});
+const sun = new THREE.Mesh(sunGeo, sunMat);
+scene.add(sun);
+
+// MERCURY
+const mercuryGeo = new THREE.SphereGeometry(3.2, 30, 30);
+const mercuryMat = new THREE.MeshBasicMaterial({
+  map: textureLoader.load(mercuryTexture),
+});
+const mercury = new THREE.Mesh(mercuryGeo, mercuryMat);
+sun.add(mercury); // parent-child relationship => position of mercury is relative to the position of the sun
+mercury.position.x = 28;
+
+// Animations
 function animate() {
+  sun.rotateY(0.004);
+  mercury.rotateY(0.004);
+
   renderer.render(scene, camera);
 }
+
 renderer.setAnimationLoop(animate);
 
+// Responsive Window
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
